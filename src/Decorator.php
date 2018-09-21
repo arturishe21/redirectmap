@@ -46,7 +46,7 @@ class Decorator implements ExceptionHandler
                 ->orWhere('old_link','/'.$path)
                 ->first();
 
-            if ($map) return \Response::redirectTo($map->new_link);
+            if ($map) return \Response::redirectTo($map->new_link, 301);
         }
 
         return $this->handler->render($request, $e);
