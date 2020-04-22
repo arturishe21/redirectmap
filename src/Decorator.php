@@ -1,10 +1,10 @@
 <?php
 namespace Litvin\Redirectmap;
 
-use Exception;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use \Litvin\Redirectmap\Models\RedirectMap;
+use Throwable;
 
 class Decorator implements ExceptionHandler
 {
@@ -25,7 +25,7 @@ class Decorator implements ExceptionHandler
      * @param  \Exception  $e
      * @return void
      */
-    public function report(Exception $e)
+    public function report(Throwable $e)
     {
         $this->handler->report($e);
     }
@@ -36,15 +36,12 @@ class Decorator implements ExceptionHandler
      * @param  \Exception  $e
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, Throwable $e)
     {
         if ($e instanceof NotFoundHttpException) {
-            $path = \Request::path();
-            $map = RedirectMap::where('old_link',$path)
-                ->orWhere('old_link',$path.'/')
-                ->orWhere('old_link','/'.$path.'/')
-                ->orWhere('old_link','/'.$path)
-                ->first();
+            $path = $request->getRequestUri();
+
+            $map = RedirectMap::where('old_link', $path)->first();
 
             if ($map) return \Response::redirectTo($map->new_link, 301);
         }
@@ -58,8 +55,13 @@ class Decorator implements ExceptionHandler
      * @param  \Exception  $e
      * @return void
      */
-    public function renderForConsole($output, Exception $e)
+    public function renderForConsole($output, Throwable $e)
     {
         $this->handler->renderForConsole($output, $e);
+    }
+
+    public function shouldReport(Throwable $e)
+    {
+        $this->handler->shouldReport($e);
     }
 }

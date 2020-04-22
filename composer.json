@@ -13,5 +13,12 @@
     "psr-4": {
       "Litvin\\Redirectmap\\": "src"
     }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Litvin\\Redirectmap\\ServiceProvider"
+      ]
+    }
   }
 }
