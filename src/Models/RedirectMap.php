@@ -7,4 +7,5 @@ class RedirectMap extends Model
 {
     protected $table = 'redirect_map';
     protected $fillable = ['old_link', 'new_link'];
+    public $timestamps = false;
 }
