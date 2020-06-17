@@ -16,6 +16,7 @@ class CreateRedirectsMap extends Migration
             $table->increments('id');
             $table->string('old_link')->index();
             $table->string('new_link');
+            $table->integer('status');
         });
     }
 

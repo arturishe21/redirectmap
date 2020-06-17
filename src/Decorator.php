@@ -40,10 +40,14 @@ class Decorator implements ExceptionHandler
     {
         if ($e instanceof NotFoundHttpException) {
             $path = $request->getRequestUri();
-
             $map = RedirectMap::where('old_link', $path)->first();
 
-            if ($map) return \Response::redirectTo($map->new_link, 301);
+            if ($map) {
+
+                $status = $map->status ? : 301;
+
+                return \Response::redirectTo($map->new_link, $status);
+            }
         }
 
         return $this->handler->render($request, $e);
