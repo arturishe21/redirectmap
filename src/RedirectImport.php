@@ -14,6 +14,10 @@ class RedirectImport implements ToModel
      */
     public function model(array $row)
     {
+        if (!$row[0] || !$row[1]) {
+            return;
+        }
+        
         return new RedirectMap([
             'old_link'     => $row[0],
             'new_link'    => $row[1],

@@ -5,6 +5,7 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use \Litvin\Redirectmap\Models\RedirectMap;
 use Throwable;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Decorator implements ExceptionHandler
 {
@@ -38,7 +39,7 @@ class Decorator implements ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        if ($e instanceof NotFoundHttpException) {
+        if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
             $path = $request->getRequestUri();
             $map = RedirectMap::where('old_link', $path)->first();
 
