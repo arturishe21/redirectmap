@@ -1,17 +1,14 @@
 <?php
 namespace Litvin\Redirectmap\Service;
 
-class Import
+use Vis\Builder\Interfaces\Button;
+use Vis\Builder\Services\ButtonBase;
+use Illuminate\Contracts\View\View;
+
+class Import extends ButtonBase implements Button
 {
-    private $definition;
-
-    public function __construct($definition)
+    public function show() : View
     {
-        $this->definition = (new $definition()) ;
-    }
-
-    public function show($list)
-    {
-        return view('redirect::import', compact('list'));
+        return view('redirect::import');
     }
 }
